@@ -7,7 +7,7 @@ self.addEventListener('install', (event) =>{
     console.log('SW: Instalado');
     const respCache = caches.open(STATIC_CACHE_NAME).then((cache)=>{
        return cache.addAll([
-            '/-pwa-gustavo',
+            '/-pwa-gustavo/',
             '/-pwa-gustavo/index.html',
             'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
             'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js',
