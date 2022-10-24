@@ -3,6 +3,16 @@ const INMUTABLE_CACHE_NAME = 'inmutable-cache-v1.1';
 const DYNAMIC_CACHE_NAME = 'dynamic-cache-v1.1';
 
 
+const cleanCache = (cacheName, limitItems) => {
+  caches.open(cacheName).then((cache) => {
+    return cache.keys().then((keys) => {
+      if (keys.length > limitItems) {
+        cache.delete(keys[0]).then(cleanCache(cacheName, limitItems));
+      }
+    });
+  });
+};
+
 self.addEventListener('install', (event) => {
   console.log('SW: Instalado');
   const respCache = caches.open(STATIC_CACHE_NAME).then((cache) => {
@@ -20,7 +30,6 @@ self.addEventListener('install', (event) => {
       '/-pwa-gustavo/images/icons/android-launchericon-512-512.png',
       'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
       'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js',
-      'https://img.remediosdigitales.com/e997b7/ducati-panigale-v4-r-2019-005/840_560.jpg',
       'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css'
     ]);
   });
@@ -29,27 +38,44 @@ self.addEventListener('install', (event) => {
   event.waitUntil(respCache);
 });
 
-self.addEventListener('fetch', (event) => {
 
+self.addEventListener('activate', (event) =>{
+    const proDelete = caches.keys().then(cachesItems =>{
 
+      cachesItems.forEach(element =>{
+        if(element !== STATIC_CACHE_NAME && element.includes('static')){
+          return caches.delete(element)
+        }
+      })
 
-  event.respondWith(async () => {
-    const cachedResponse = await caches.match(event.request);
+    })
 
-    if (cachedResponse) {
-      return cachedResponse
-    } else {
-      return fetch(event.request) // response of requests
-        .then((res) => {
-          return caches.open(STATIC_CACHE_NAME) //create dynamic cache
-            .then((cache) => {
-              cache.put(event.request.url, res.clone());
-              return res;
-            })
-        })
-    }
-  })
-
-
-
+    event.waitUntil(Promise.all([proDelete]));
 })
+
+self.addEventListener('fetch', (event) => {
+  const resp = caches.match(event.request).then((respCache) => {
+    if (respCache) {
+      return respCache;
+    }
+    return fetch(event.request).then((respWeb) => {
+      caches.open(DYNAMIC_CACHE_NAME).then((cache) => {
+        cache.put(event.request, respWeb);
+        cleanCache(DYNAMIC_CACHE_NAME, 10);
+      });
+      return respWeb.clone();
+    }).catch((err) => {
+      if(event.request.headers.get('accept').includes('image/*')){
+        return caches.match('/-pwa-gustavo/images/icons/android-launchericon-144-144.png')
+      }
+
+      if(event.request.headers.get('accept').includes('text/html')){
+        return caches.match('/-pwa-gustavo/pages/offline.html')
+      }
+    
+    });
+  });
+  event.respondWith(resp);
+});
+
+
