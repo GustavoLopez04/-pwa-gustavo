@@ -28,6 +28,7 @@ self.addEventListener('install', (event) => {
       '/-pwa-gustavo/images/icons/android-launchericon-192-192.png',
       '/-pwa-gustavo/images/icons/android-launchericon-512-512.png',
       '/-pwa-gustavo/images/icons/android-launchericon-512-512.png',
+      '/-pwa-gustavo/pages/offline.html',
       'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
       'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js',
       'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css'
