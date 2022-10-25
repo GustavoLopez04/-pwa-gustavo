@@ -22,10 +22,7 @@ self.addEventListener('install', (event) => {
       '/-pwa-gustavo/images/icons/android-launchericon-72-72.png',
       '/-pwa-gustavo/images/icons/android-launchericon-96-96.png',
       '/-pwa-gustavo/images/icons/android-launchericon-144-144.png',
-      '/-pwa-gustavo/images/icons/android-launchericon-144-144.png',
-      '/-pwa-gustavo/images/icons/android-launchericon-144-144.png',
       '/-pwa-gustavo/images/icons/android-launchericon-192-192.png',
-      '/-pwa-gustavo/images/icons/android-launchericon-512-512.png',
       '/-pwa-gustavo/images/icons/android-launchericon-512-512.png',
       '/-pwa-gustavo/manifest.json',
       '/-pwa-gustavo/pages/offline.html',
@@ -33,10 +30,9 @@ self.addEventListener('install', (event) => {
   });
   const respCacheInmutable = caches.open(INMUTABLE_CACHE_NAME).then((cache) => {
     return cache.addAll([
-       'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
-      'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js',
+      'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css',
       'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
-      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/webfonts/fa-solid-900.woff2',
+      'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js'
     ]);
   });
 
